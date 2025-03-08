@@ -33,6 +33,7 @@ document
         },
         body: JSON.stringify(user),
       });
+      console.log("API response:", response);
 
       const data = await response.json();
       console.log("API response:", data);

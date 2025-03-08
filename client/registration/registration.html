@@ -214,7 +214,7 @@
       .password-toggle {
         position: absolute;
         right: 15px;
-        top: 38px;
+        top: 15px;
         color: var(--text-secondary);
         cursor: pointer;
         transition: all 0.3s ease;
@@ -299,6 +299,40 @@
           width: 90%;
           padding: 30px 20px;
         }
+      }
+
+      /* Message Styles */
+      #message {
+        position: fixed;
+        top: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        padding: 12px 24px;
+        border-radius: 8px;
+        font-size: 14px;
+        font-weight: 500;
+        z-index: 1000;
+        opacity: 0;
+        animation: messageAppear 0.3s forwards;
+      }
+
+      @keyframes messageAppear {
+        to {
+          opacity: 1;
+          transform: translateX(-50%) translateY(0);
+        }
+      }
+
+      #message.error {
+        background-color: rgba(255, 82, 82, 0.95);
+        color: white;
+        box-shadow: 0 4px 12px rgba(255, 82, 82, 0.35);
+      }
+
+      #message.success {
+        background-color: rgba(76, 217, 100, 0.95);
+        color: white;
+        box-shadow: 0 4px 12px rgba(76, 217, 100, 0.35);
       }
     </style>
   </head>
@@ -442,7 +476,7 @@
       // Form validation
       document
         .getElementById("registrationForm")
-        .addEventListener("submit", function (e) {
+        .addEventListener("submit", async function (e) {
           e.preventDefault();
 
           const username = document.getElementById("username").value;
@@ -495,15 +529,60 @@
             const button = document.querySelector(".register-btn");
             button.innerText = "Creating Account...";
 
-            // Here you would normally send the form data to your server
-            // For demo purposes, we'll simulate a delay and redirect
-            setTimeout(() => {
-              // This is where you would handle the response from your server
-              // For now, we'll just redirect to the login page
-              window.location.href = "../login/login.html";
-            }, 1500);
+            const user = {
+              username,
+              password,
+              role,
+            };
+
+            try {
+              const response = await fetch(
+                "http://localhost:3000/auth/signup",
+                {
+                  method: "POST",
+                  headers: {
+                    "Content-Type": "application/json",
+                  },
+                  body: JSON.stringify(user),
+                }
+              );
+              console.log("API response:", response);
+
+              const data = await response.json();
+              console.log("API response:", data);
+
+              if (response.ok) {
+                showMessage(
+                  `User ${username} registered successfully as ${role}!`,
+                  "success"
+                );
+                this.reset();
+                window.location.href = "../login/login.html";
+              } else {
+                showMessage(`Error: ${data.message}`, "error");
+              }
+            } catch (error) {
+              console.error("Error registering user:", error);
+              showMessage("An error occurred. Please try again.", "error");
+            }
           }
         });
+
+      function showMessage(text, type) {
+        let messageDiv = document.getElementById("message");
+        if (!messageDiv) {
+          messageDiv = document.createElement("div");
+          messageDiv.id = "message";
+          document.body.appendChild(messageDiv);
+        }
+        messageDiv.textContent = text;
+        messageDiv.className = type;
+
+        setTimeout(() => {
+          messageDiv.textContent = "";
+          messageDiv.className = "";
+        }, 3000);
+      }
 
       // Add subtle animation to form elements on page load
       document.addEventListener("DOMContentLoaded", function () {
