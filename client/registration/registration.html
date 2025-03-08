@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Cathago Sign Up Form</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #4a7fff;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        margin: 0;
+      }
+
+      .registration-container {
+        background-color: white;
+        border-radius: 8px;
+        padding: 30px;
+        width: 350px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      }
+
+      .registration-container h2 {
+        text-align: center;
+        margin-bottom: 20px;
+        color: #333;
+      }
+
+      .form-group {
+        margin-bottom: 15px;
+      }
+
+      .form-group input,
+      .form-group select {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        box-sizing: border-box;
+      }
+
+      .form-group input::placeholder,
+      .form-group select::placeholder {
+        color: #999;
+      }
+
+      .checkbox-group {
+        display: flex;
+        align-items: center;
+        margin-bottom: 15px;
+      }
+
+      .checkbox-group input {
+        margin-right: 10px;
+      }
+
+      .register-btn {
+        width: 100%;
+        padding: 12px;
+        background-color: #4a7fff;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+      }
+
+      .login-link {
+        text-align: center;
+        margin-top: 15px;
+      }
+
+      .login-link a {
+        color: #4a7fff;
+        text-decoration: none;
+      }
+    </style>
+  </head>
+  <body>
+    <script>
+      if (localStorage.getItem("token")) {
+        window.location.href = "../dashboard/dashboard.html";
+      }
+    </script>
+    <div class="registration-container">
+      <h2>Cathago Registration</h2>
+      <form id="registrationForm">
+        <div class="form-group">
+          <input
+            type="text"
+            id="username"
+            placeholder="Enter your username"
+            required
+          />
+        </div>
+        <div class="form-group">
+          <select id="role" required>
+            <option value="" disabled selected>Select your role</option>
+            <option value="user">User</option>
+            <option value="admin">Admin</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <input
+            type="password"
+            id="password"
+            placeholder="Create password"
+            required
+          />
+        </div>
+        <div class="form-group">
+          <input
+            type="password"
+            id="confirmPassword"
+            placeholder="Confirm password"
+            required
+          />
+        </div>
+
+        <button type="submit" class="register-btn">Register Now</button>
+      </form>
+      <div class="login-link">
+        <a href="../login/login.html">Already have an account? Login now</a>
+      </div>
+    </div>
+    <script type="module" src="./registrationscript.js"></script>
+  </body>
+</html>

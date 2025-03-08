@@ -1,0 +1,37 @@
+post http://localhost:5000/user/doctor/signup
+{
+    "name": "Dr. John Doe",
+    "email": "dr.johndoe@example.com",
+    "password": "password123",
+    "phone": "1234567890",
+    "profilePicture": "url_or_base64_encoded_image",
+    "specialty": "Cardiology",
+    "experience": 5.0
+}
+
+post  http://localhost:5000/user/doctor/signin
+
+{
+  "email": "dr.johndoe@example.com",
+  "password": "password123"
+}
+
+post http://localhost:5000/user/patient/signup
+
+{
+  "name": "Jane Smith",
+  "email": "jane.smith@example.com",
+  "password": "password123",
+  "phone": "9876543210",
+  "age": 30,
+  "surgeryHistory": "Appendectomy, Knee Surgery",
+  "illnessHistory": "Asthma, Diabetes",
+  "profilePicture": "url_or_base64_encoded_image"
+}
+
+post http://localhost:5000/user/patient/signin
+
+{
+    "email": "jane.smith@example.com",
+    "password": "password123"
+}

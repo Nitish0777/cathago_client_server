@@ -1,0 +1,157 @@
+.credit-requests {
+  margin-top: 20px;
+  padding: 20px;
+  background-color: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.credit-requests h2 {
+  color: #333;
+  text-align: center;
+  margin-bottom: 15px;
+}
+
+.credit-requests table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.credit-requests th,
+.credit-requests td {
+  padding: 10px;
+  border: 1px solid #ddd;
+  text-align: left;
+}
+
+.credit-requests th {
+  background-color: #f4f4f4;
+}
+
+.credit-request button {
+  padding: 10px 20px;
+  margin-right: 10px;
+  background-color: #4a7fff;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background-color 0.3s ease;
+}
+
+.credit-request button:hover {
+  background-color: #357abd;
+}
+
+.users-list {
+  margin-top: 20px;
+  padding: 20px;
+  background-color: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.users-list h2 {
+  color: #333;
+  text-align: center;
+  margin-bottom: 15px;
+}
+
+.users-list table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.users-list th,
+.users-list td {
+  padding: 10px;
+  border: 1px solid #ddd;
+  text-align: left;
+}
+
+.users-list th {
+  background-color: #f4f4f4;
+}
+
+.users-list .delete-btn {
+  padding: 10px 20px;
+  background-color: #ff4a4a;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background-color 0.3s ease;
+}
+
+.users-list .delete-btn:hover {
+  background-color: #d93636;
+}
+
+.analytics {
+  margin-top: 20px;
+  padding: 20px;
+  background-color: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.analytics h2 {
+  width: 100%;
+  color: #333;
+  text-align: center;
+  margin-bottom: 15px;
+}
+
+.analytics p {
+  font-size: 16px;
+  color: #555;
+}
+
+.analytics h3 {
+  color: #333;
+  margin-top: 15px;
+}
+
+.analytics ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+.analytics li {
+  margin: 5px 0;
+  font-size: 16px;
+  color: #555;
+}
+
+.analytics-card {
+  flex: 1 1 calc(50% - 20px);
+  background-color: #f9f9f9;
+  padding: 15px;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.analytics-card h3 {
+  margin-top: 0;
+  color: #333;
+}
+
+.analytics-card p,
+.analytics-card ul {
+  font-size: 16px;
+  color: #555;
+}
+
+.analytics-card ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+.analytics-card li {
+  margin: 5px 0;
+}

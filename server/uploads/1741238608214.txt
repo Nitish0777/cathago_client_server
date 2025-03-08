@@ -1,0 +1,179 @@
+1)mysql> select * from employee where hiredate <= date_sub(now(),interval 2 year);
++-----+-------+---------+----------------------+-------+------+------------+------+-----------------+
+| SSN | Name  | salary  | department           | D_num | mgr  | hiredate   | comm | job             |
++-----+-------+---------+----------------------+-------+------+------------+------+-----------------+
+|   1 | Rajat | 5500000 | database             |     1 | 2001 | 2019-08-21 |  300 | manager         |
+|   2 | soham | 1000000 | marketing            |     2 | 2002 | 2020-08-11 |  600 | content_creator |
+|   4 | varun | 1540000 | software development |     4 | 2004 | 2019-02-03 |  300 | coder           |
++-----+-------+---------+----------------------+-------+------+------------+------+-----------------+
+3 rows in set (0.01 sec)
+2)mysql> select * from employee
+    -> order by salary asc;
++-----+---------+---------+----------------------+-------+------+------------+------+---------------------+
+| SSN | Name    | salary  | department           | D_num | mgr  | hiredate   | comm | job                 |
++-----+---------+---------+----------------------+-------+------+------------+------+---------------------+
+|   3 | jeet    |  200000 | web development      |     3 | NULL | 2021-05-22 |  500 | front end developer |
+|   2 | soham   | 1000000 | marketing            |     2 | NULL | 2020-08-11 |  600 | content_creator     |
+|   4 | varun   | 1400000 | software development |     4 | NULL | 2019-02-03 |  300 | coder               |
+|   5 | utkarsh | 4000000 | web devlopment       |     3 | NULL | 2022-03-05 |  200 | back end developer  |
+|   1 | Rajat   | 5000000 | database             |     1 | 2001 | 2019-08-21 |  300 | manager             |
++-----+---------+---------+----------------------+-------+------+------------+------+---------------------+
+5 rows in set (0.03 sec)
+
+3)mysql> select Name
+    -> from employee
+    -> where salary>
+    -> (select salary
+    -> from employee
+    -> where Name='soham'
+    -> );
++---------+
+| Name    |
++---------+
+| Rajat   |
+| varun   |
+| utkarsh |
++---------+
+3 rows in set (0.01 sec)
+
+4)mysql> update employee
+    -> set salary = salary +salary*0.1
+    -> where SSN = 1;
+Query OK, 1 row affected (0.02 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> select * from employee
+    -> where SSN = 1;
++-----+-------+---------+------------+-------+------+------------+------+---------+
+| SSN | Name  | salary  | department | D_num | mgr  | hiredate   | comm | job     |
++-----+-------+---------+------------+-------+------+------------+------+---------+
+|   1 | Rajat | 5500000 | database   |     1 | 2001 | 2019-08-21 |  300 | manager |
++-----+-------+---------+------------+-------+------+------------+------+---------+
+1 row in set (0.01 sec)
+5)mysql> select Name from employee
+    -> where salary between 100000 and 4000000;
++---------+
+| Name    |
++---------+
+| soham   |
+| jeet    |
+| varun   |
+| utkarsh |
++---------+
+4 rows in set (0.00 sec)
+6)select Name from employee where comm=0;
+Empty set (0.00 sec)
+7)mysql> update employee
+    -> set salary = salary + salary*0.1
+    -> where job = 'coder';
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> select * from employee
+    -> where job = 'coder';
++-----+-------+---------+----------------------+-------+------+------------+------+-------+
+| SSN | Name  | salary  | department           | D_num | mgr  | hiredate   | comm | job   |
++-----+-------+---------+----------------------+-------+------+------------+------+-------+
+|   4 | varun | 1540000 | software development |     4 | NULL | 2019-02-03 |  300 | coder |
++-----+-------+---------+----------------------+-------+------+------------+------+-------+
+1 row in set (0.00 sec)
+8)mysql> select job, sum(salary), avg(salary), min(salary), max(salary)
+    -> from employee
+    -> group by job;
++---------------------+-------------+--------------+-------------+-------------+
+| job                 | sum(salary) | avg(salary)  | min(salary) | max(salary) |
++---------------------+-------------+--------------+-------------+-------------+
+| manager             |     5500000 | 5500000.0000 |     5500000 |     5500000 |
+| content_creator     |     1000000 | 1000000.0000 |     1000000 |     1000000 |
+| front end developer |      200000 |  200000.0000 |      200000 |      200000 |
+| coder               |     1540000 | 1540000.0000 |     1540000 |     1540000 |
+| back end developer  |     4000000 | 4000000.0000 |     4000000 |     4000000 |
++---------------------+-------------+--------------+-------------+-------------+
+5 rows in set (0.01 sec)
+9)mysql> delete from employee where Name like 'j%';
+ERROR 1451 (23000): Cannot delete or update a parent row: a foreign key constraint fails (`rajat`.`department`, CONSTRAINT `department_ibfk_1` FOREIGN KEY (`D_num`) REFERENCES `employee` (`SSN`))
+10)select Name from employee
+    -> where job = 'marketing' and comm>300;
+Empty set (0.00 sec)
+11)mysql> select * from employee
+    -> where D_num in (2,3,5);
++-----+---------+---------+-----------------+-------+------+------------+------+---------------------+
+| SSN | Name    | salary  | department      | D_num | mgr  | hiredate   | comm | job                 |
++-----+---------+---------+-----------------+-------+------+------------+------+---------------------+
+|   2 | soham   | 1000000 | marketing       |     2 | 2002 | 2020-08-11 |  600 | content_creator     |
+|   3 | jeet    |  200000 | web development |     3 | 2003 | 2021-05-22 |  500 | front end developer |
+|   5 | utkarsh | 4000000 | web devlopment  |     3 | 2005 | 2022-03-05 |  200 | back end developer  |
++-----+---------+---------+-----------------+-------+------+------------+------+---------------------+
+3 rows in set (0.01 sec)
+
+set 5)
+1)mysql> select Name, salary
+    -> from employee
+    -> order by job;
++---------+---------+
+| Name    | salary  |
++---------+---------+
+| utkarsh | 4000000 |
+| varun   | 1540000 |
+| soham   | 1000000 |
+| jeet    |  200000 |
+| Rajat   | 5500000 |
++---------+---------+
+5 rows in set (0.01 sec)
+2)mysql> delete from employee
+    -> where length(Name)=2;
+Query OK, 0 rows affected (0.01 sec)
+3)mysql> update employee
+    -> set salary = salary +salary*0.3
+    -> where SSN = 7000;
+Query OK, 1 row affected (0.02 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+4)SELECT hire_date,
+       SUM(salary) AS total_salary,
+       MAX(salary) AS max_salary,
+       MIN(salary) AS min_salary,
+       AVG(salary) AS avg_salary
+FROM employees
+GROUP BY hire_date;
+
+5)mysql> select Name from employee
+    -> where Name like '%t';
++-------+
+| Name  |
++-------+
+| Rajat |
+| jeet  |
++-------+
+2 rows in set (0.00 sec)
+6)mysql> select * from employee
+    -> where salary<
+    -> (select salary from employee
+    -> where Name = 'varun');
++-----+-------+---------+-----------------+-------+------+------------+------+---------------------+
+| SSN | Name  | salary  | department      | D_num | mgr  | hiredate   | comm | job                 |
++-----+-------+---------+-----------------+-------+------+------------+------+---------------------+
+|   2 | soham | 1000000 | marketing       |     2 | 2002 | 2020-08-11 |  600 | content_creator     |
+|   3 | jeet  |  200000 | web development |     3 | 2003 | 2021-05-22 |  500 | front end developer |
++-----+-------+---------+-----------------+-------+------+------------+------+---------------------+
+2 rows in set (0.00 sec)
+7)SELECT *
+FROM employees
+WHERE salary >= 10000 AND salary <= 50000;
+8)mysql> select * from employee
+    -> where D_num in (30,40,10);
+
+
+9)mysql> select *
+    -> from employee
+    -> where job = 'coder' and salary >1000
+    -> order by salary desc;
++-----+-------+---------+----------------------+-------+------+------------+------+-------+
+| SSN | Name  | salary  | department           | D_num | mgr  | hiredate   | comm | job   |
++-----+-------+---------+----------------------+-------+------+------------+------+-------+
+|   4 | varun | 1540000 | software development |     4 | 2004 | 2019-02-03 |  300 | coder |
++-----+-------+---------+----------------------+-------+------+------------+------+-------+
+1 row in set (0.00 sec)
+10)mysql> select * from employee
+    -> where job = 'coder' and comm >300;
+Empty set (0.00 sec)

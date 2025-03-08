@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document List</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div class="upload-section">
+      <h2>Upload Document</h2>
+      <form id="uploadForm">
+        <input
+          type="text"
+          id="documentName"
+          placeholder="Enter document name"
+          required
+        />
+        <input type="file" id="documentFile" name="document" required />
+        <button type="submit">Upload</button>
+      </form>
+      <p id="uploadStatus"></p>
+    </div>
+
+    <div class="documents">
+      <h2>All Documents</h2>
+      <div class="document-list"></div>
+    </div>
+
+    <div class="matches">
+      <h2>Document Matches</h2>
+      <div class="match-list"></div>
+    </div>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", async function () {
+        const token = localStorage.getItem("token");
+        if (!token) {
+          window.location.href = "../login/login.html";
+          return;
+        }
+
+        const documentList = document.querySelector(".document-list");
+        const uploadForm = document.getElementById("uploadForm");
+        const uploadStatus = document.getElementById("uploadStatus");
+        const matchList = document.querySelector(".match-list");
+
+        async function fetchDocuments() {
+          try {
+            const response = await fetch(
+              "http://localhost:3000/document/documents",
+              {
+                headers: { Authorization: `Bearer ${token}` },
+              }
+            );
+
+            if (!response.ok)
+              throw new Error(`HTTP error! Status: ${response.status}`);
+
+            const data = await response.json();
+            if (!data.documents || !Array.isArray(data.documents))
+              throw new Error("Invalid documents response");
+
+            renderDocuments(data.documents);
+          } catch (error) {
+            console.error("Error fetching documents:", error);
+          }
+        }
+
+        function renderDocuments(documents) {
+          documentList.innerHTML = "";
+          documents.forEach((doc) => {
+            const card = document.createElement("div");
+            card.classList.add("document-card");
+
+            card.innerHTML = `
+              <h3>${doc.filename}</h3>
+              <p><strong>Created At:</strong> ${doc.created_at}</p>
+              <p><strong>Content:</strong> <pre>${doc.content}</pre></p>
+              <a href="http://localhost:3000/${doc.filepath}" download>Download</a>
+              <button type="button" class="fetch-matches-button" data-doc-id="${doc.id}">Get Matching Documents</button>
+            `;
+
+            documentList.appendChild(card);
+          });
+
+          // Add event listeners after the buttons are created
+          attachMatchButtonListeners();
+        }
+
+        function attachMatchButtonListeners() {
+          document
+            .querySelectorAll(".fetch-matches-button")
+            .forEach((button) => {
+              button.addEventListener("click", function (event) {
+                const docId = this.getAttribute("data-doc-id");
+                fetchMatches(docId);
+              });
+            });
+        }
+
+        async function fetchMatches(docId) {
+          try {
+            const response = await fetch(
+              `http://localhost:3000/document/matches/${docId}`,
+              {
+                headers: { Authorization: `Bearer ${token}` },
+              }
+            );
+
+            if (!response.ok)
+              throw new Error(`HTTP error! Status: ${response.status}`);
+
+            const data = await response.json();
+            if (!data.matches || !Array.isArray(data.matches))
+              throw new Error("Invalid matches response");
+
+            renderMatches(data.matches);
+          } catch (error) {
+            console.error("Error fetching matches:", error);
+          }
+        }
+
+        function renderMatches(matches) {
+          matchList.innerHTML = "";
+
+          if (matches.length === 0) {
+            matchList.innerHTML = "<p>No matching documents found.</p>";
+            return;
+          }
+
+          matches.forEach((match) => {
+            const card = document.createElement("div");
+            card.classList.add("match-card");
+
+            card.innerHTML = `
+              <h3>${match.title}</h3>
+              <p><strong>Matched At:</strong> ${match.matched_at}</p>
+              <p><strong>Details:</strong> <pre>${match.details}</pre></p>
+              <button class="close-match-button">Close</button>
+            `;
+
+            matchList.appendChild(card);
+          });
+
+          document.querySelectorAll(".close-match-button").forEach((button) => {
+            button.addEventListener("click", function () {
+              this.parentElement.remove();
+            });
+          });
+        }
+
+        uploadForm.addEventListener("submit", async (event) => {
+          event.preventDefault();
+
+          const documentName = document.getElementById("documentName").value;
+          const documentFile = document.getElementById("documentFile").files[0];
+
+          if (!documentName || !documentFile) {
+            uploadStatus.textContent = "Please fill all fields!";
+            uploadStatus.style.color = "red";
+            return;
+          }
+
+          const formData = new FormData();
+          formData.append("filename", documentName);
+          formData.append("document", documentFile);
+
+          try {
+            const response = await fetch(
+              "http://localhost:3000/document/upload",
+              {
+                method: "POST",
+                body: formData,
+                headers: { Authorization: `Bearer ${token}` },
+              }
+            );
+
+            if (!response.ok) throw new Error("Failed to upload file");
+
+            uploadStatus.textContent = "File uploaded successfully!";
+            uploadStatus.style.color = "green";
+
+            uploadForm.reset();
+
+            setTimeout(() => {
+              uploadStatus.textContent = "";
+            }, 3000);
+
+            fetchDocuments();
+          } catch (error) {
+            console.error("Upload error:", error);
+            uploadStatus.textContent = "Upload failed!";
+            uploadStatus.style.color = "red";
+          }
+        });
+
+        fetchDocuments();
+      });
+    </script>
+  </body>
+</html>
