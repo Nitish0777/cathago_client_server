@@ -30,14 +30,13 @@ To start the application, use the following commands:
 
 1. Start the server:
    ```sh
-   npm install
+   cd server
    npm start
    ```
 2. Start the client:
-
-   ```
-   Run Go Live on index.html
-
+   ```sh
+   cd ../client
+   npx live-server
    ```
 
 ## Routing
@@ -47,8 +46,12 @@ The application uses the following routes:
 ### Client
 
 - `/` - Home page
-- `/about` - About page
-- `/contact` - Contact page
+- `/registration/registration.html` - Registration page
+- `/login/login.html` - Login page
+- `/dashboard/dashboard.html` - User dashboard
+- `/adminDashboard/dashboard.html` - Admin dashboard
+- `/document/document.html` - Document upload and list page
+- `/document/matching_documents.html` - Matching documents page
 
 ### Server
 
