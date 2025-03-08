@@ -1,0 +1,83 @@
+<div class="navbar">
+  <div class="navbar-container">
+    <div class="logo">
+      <a href="../index.html">Cathago</a>
+    </div>
+    <div class="nav-links">
+      <a href="../document/document.html">Scan Document</a>
+      <span id="auth-links"></span>
+    </div>
+  </div>
+</div>
+
+<style>
+  .navbar {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+  }
+
+  .navbar-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .logo a {
+    font-size: 24px;
+    font-weight: bold;
+    color: var(--primary-color);
+    text-decoration: none;
+  }
+
+  .nav-links {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+  }
+
+  .nav-links a {
+    color: var(--text-primary);
+    text-decoration: none;
+    font-size: 16px;
+    transition: color 0.3s ease;
+  }
+
+  .nav-links a:hover {
+    color: var(--primary-color);
+  }
+</style>
+
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const authLinks = document.getElementById("auth-links");
+    const token = localStorage.getItem("token");
+    const username = localStorage.getItem("username");
+
+    if (token) {
+      authLinks.innerHTML = `
+        <span>Welcome, ${username}</span>
+        <a href="#" id="logout-link">Logout</a>
+      `;
+
+      document.getElementById("logout-link").addEventListener("click", () => {
+        localStorage.removeItem("username");
+        localStorage.removeItem("token");
+        localStorage.removeItem("role");
+        window.location.href = "../login/login.html";
+      });
+    } else {
+      authLinks.innerHTML = `
+        <a href="../login/login.html">Login</a>
+        <a href="../registration/registration.html">Register</a>
+      `;
+    }
+  });
+</script>

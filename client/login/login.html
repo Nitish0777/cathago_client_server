@@ -376,6 +376,16 @@
     </style>
   </head>
   <body>
+    <!-- Include Navbar -->
+    <div id="navbar-container"></div>
+    <script>
+      fetch("../components/navbar.html")
+        .then((response) => response.text())
+        .then((data) => {
+          document.getElementById("navbar-container").innerHTML = data;
+        });
+    </script>
+
     <div class="animated-background">
       <div class="circle"></div>
       <div class="circle"></div>
