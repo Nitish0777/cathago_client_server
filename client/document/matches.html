@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Matching Documents</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        padding: 20px;
+      }
+      .match-card {
+        border: 1px solid #ccc;
+        padding: 10px;
+        margin-bottom: 10px;
+        border-radius: 5px;
+      }
+      .match-card h3 {
+        margin: 0;
+      }
+      .match-card a {
+        color: #007bff;
+        text-decoration: none;
+      }
+      .match-card a:hover {
+        text-decoration: underline;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Matching Documents</h1>
+    <div id="match-list"></div>
+
+    <script>
+      // Retrieve data from localStorage
+      const matchingDocuments = JSON.parse(
+        localStorage.getItem("matchingDocuments")
+      );
+
+      const matchList = document.getElementById("match-list");
+
+      if (matchingDocuments && matchingDocuments.similarDocuments) {
+        const similarDocuments = matchingDocuments.similarDocuments;
+
+        if (similarDocuments.length > 0) {
+          matchList.innerHTML = similarDocuments
+            .map(
+              (match) => `
+              <div class="match-card">
+                <h3>${match.filename || "Unnamed Document"}</h3>
+                ${
+                  match.similarity !== undefined
+                    ? `<p><strong>Similarity:</strong> ${(
+                        match.similarity * 100
+                      ).toFixed(2)}%</p>`
+                    : ""
+                }
+                <p><strong>Document ID:</strong> ${match.docId || "N/A"}</p>
+                <a href="http://localhost:3000${match.filePath}" 
+                  download="${match.filename || "document"}">
+                  Download
+                </a>
+              </div>
+            `
+            )
+            .join("");
+        } else {
+          matchList.innerHTML = "<p>No matching documents found.</p>";
+        }
+      } else {
+        matchList.innerHTML = "<p>No data available.</p>";
+      }
+    </script>
+  </body>
+</html>

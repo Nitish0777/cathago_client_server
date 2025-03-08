@@ -4,7 +4,37 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document List</title>
-    <link rel="stylesheet" href="style.css" />
+    <style>
+      /* Existing styles... */
+
+      /* New styles for modal */
+      .modal {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+        justify-content: center;
+        align-items: center;
+      }
+
+      .modal-content {
+        background-color: white;
+        padding: 20px;
+        border-radius: 5px;
+        max-width: 80%;
+        max-height: 80%;
+        overflow-y: auto;
+      }
+
+      .close-button {
+        float: right;
+        cursor: pointer;
+        font-size: 20px;
+      }
+    </style>
   </head>
   <body>
     <div class="upload-section">
@@ -17,180 +47,250 @@
           required
         />
         <input type="file" id="documentFile" name="document" required />
-        <button type="submit">Upload</button>
+        <button type="submit" class="button">Upload</button>
       </form>
-      <p id="uploadStatus"></p>
+      <div id="uploadStatus" class="status-message"></div>
     </div>
 
     <div class="documents">
       <h2>All Documents</h2>
+      <div id="statusMessage" class="status-message"></div>
       <div class="document-list"></div>
     </div>
 
-    <div class="matches">
-      <h2>Matching Documents</h2>
-      <div class="match-list"></div>
+    <!-- Modal for displaying matching documents -->
+    <div class="modal" id="matchesModal">
+      <div class="modal-content">
+        <span class="close-button" onclick="closeModal()">&times;</span>
+        <h2>Matching Documents</h2>
+        <div class="loading-indicator">Loading matches...</div>
+        <div class="error-message"></div>
+        <div class="match-list"></div>
+      </div>
     </div>
 
     <script>
-      document.addEventListener("DOMContentLoaded", async function () {
+      // Authentication check
+      function checkAuth() {
+        console.log("Checking authentication...");
         const token = localStorage.getItem("token");
         if (!token) {
+          console.log("No token found, redirecting to login...");
           window.location.href = "../login/login.html";
+          return false;
+        }
+        console.log("Token found", token);
+        return token;
+      }
+
+      // Status display functions
+      function showUploadStatus(message, isError) {
+        console.log("Showing upload status:", message);
+        const statusElement = document.getElementById("uploadStatus");
+        statusElement.textContent = message;
+        statusElement.className = isError
+          ? "status-message error"
+          : "status-message success";
+        if (!isError) setTimeout(() => (statusElement.textContent = ""), 3000);
+      }
+
+      // Date formatting
+      function formatDate(dateString) {
+        console.log("Formatting date:", dateString);
+        try {
+          return new Date(dateString).toLocaleString();
+        } catch {
+          return "Unknown date";
+        }
+      }
+
+      // Document loading
+      async function loadDocuments() {
+        console.log("Loading documents...");
+        const token = checkAuth();
+        if (!token) return;
+
+        const documentList = document.querySelector(".document-list");
+        documentList.innerHTML = "Loading documents...";
+
+        try {
+          const response = await fetch(
+            "http://localhost:3000/document/documents",
+            {
+              headers: {
+                Authorization: `Bearer ${token}`,
+                Accept: "*/*",
+              },
+            }
+          );
+
+          console.log("Documents fetch response:", response);
+          if (!response.ok) {
+            if (response.status === 401) {
+              console.log("Unauthorized, redirecting to login...");
+              localStorage.removeItem("token");
+              window.location.href = "../login/login.html";
+              return;
+            }
+            throw new Error(`HTTP error! Status: ${response.status}`);
+          }
+
+          const data = await response.json();
+          console.log("Documents data received:", data);
+
+          documentList.innerHTML = data.documents?.length
+            ? data.documents
+                .map(
+                  (doc) => `
+                <div class="document-card">
+                  <h3>${doc.filename || "Unnamed Document"}</h3>
+                  <p><strong>Created At:</strong> ${formatDate(
+                    doc.created_at
+                  )}</p>
+                  ${
+                    doc.content
+                      ? `<p><strong>Content:</strong> <pre>${doc.content}</pre></p>`
+                      : ""
+                  }
+                  <div class="actions">
+                    <a href="http://localhost:3000/${
+                      doc.filepath?.startsWith("/")
+                        ? doc.filepath.slice(1)
+                        : doc.filepath
+                    }" 
+                       class="button" 
+                       download="${doc.filename || "document"}">Download</a>
+                    <button type="button" class="button view-matches" data-doc-id="${
+                      doc.id
+                    }">View Matching Documents</button>
+                  </div>
+                </div>
+              `
+                )
+                .join("")
+            : "<p>No documents found.</p>";
+
+          // Add event listeners to all "View Matching Documents" buttons
+          document.querySelectorAll(".view-matches").forEach((button) => {
+            button.addEventListener("click", async (e) => {
+              e.preventDefault(); // Prevent default behavior
+              const docId = button.getAttribute("data-doc-id");
+              console.log("Fetching matches for document ID:", docId);
+              await viewMatches(docId); // Fetch and redirect
+            });
+          });
+        } catch (error) {
+          console.error("Error loading documents:", error);
+          documentList.innerHTML =
+            "<p>Error loading documents. Please try again.</p>";
+        }
+      }
+
+      // Upload handling
+      async function setupUploadForm() {
+        console.log("Setting up upload form...");
+        const token = checkAuth();
+        if (!token) return;
+
+        document
+          .getElementById("uploadForm")
+          .addEventListener("submit", async (e) => {
+            e.preventDefault();
+            console.log("Uploading document...");
+            const formData = new FormData();
+            formData.append(
+              "filename",
+              document.getElementById("documentName").value
+            );
+            formData.append(
+              "document",
+              document.getElementById("documentFile").files[0]
+            );
+
+            showUploadStatus("Uploading...", false);
+
+            try {
+              const response = await fetch(
+                "http://localhost:3000/document/upload",
+                {
+                  method: "POST",
+                  body: formData,
+                  headers: {
+                    Authorization: `Bearer ${token}`,
+                    Accept: "*/*",
+                  },
+                }
+              );
+
+              console.log("Upload response:", response);
+              if (!response.ok) throw new Error("Upload failed");
+
+              const data = await response.json();
+              console.log("Upload success data:", data);
+              showUploadStatus("File uploaded successfully!", false);
+              document.getElementById("uploadForm").reset();
+              await loadDocuments(); // Reload documents after upload
+            } catch (error) {
+              console.error("Upload error:", error);
+              showUploadStatus(`Upload failed: ${error.message}`, true);
+            }
+          });
+      }
+
+      // Fetch and redirect to a new page with matching documents
+      async function viewMatches(docId) {
+        console.log("Viewing matches for document ID:", docId);
+        const token = checkAuth();
+        if (!token) {
+          console.log("No token found, redirecting to login...");
           return;
         }
 
-        const documentList = document.querySelector(".document-list");
-        const uploadForm = document.getElementById("uploadForm");
-        const uploadStatus = document.getElementById("uploadStatus");
-        const matchList = document.querySelector(".match-list");
+        const url = `http://localhost:3000/document/matches/${docId}`;
+        console.log("Fetching matches from:", url);
 
-        async function fetchDocuments() {
-          try {
-            const response = await fetch(
-              "http://localhost:3000/document/documents",
-              {
-                headers: { Authorization: `Bearer ${token}` },
-              }
-            );
-
-            if (!response.ok)
-              throw new Error(`HTTP error! Status: ${response.status}`);
-
-            const data = await response.json();
-            if (!data.documents || !Array.isArray(data.documents))
-              throw new Error("Invalid documents response");
-
-            renderDocuments(data.documents);
-          } catch (error) {
-            console.error("Error fetching documents:", error);
-          }
-        }
-
-        function renderDocuments(documents) {
-          documentList.innerHTML = "";
-          documents.forEach((doc) => {
-            const card = document.createElement("div");
-            card.classList.add("document-card");
-
-            card.innerHTML = `
-              <h3>${doc.filename}</h3>
-              <p><strong>Created At:</strong> ${doc.created_at}</p>
-              <p><strong>Content:</strong> <pre>${doc.content}</pre></p>
-              <a href="http://localhost:3000/${doc.filepath}" download>Download</a>
-              <button type="button" class="fetch-matches-button" data-doc-id="${doc.id}">Get Matching Documents</button>
-            `;
-
-            documentList.appendChild(card);
+        try {
+          const response = await fetch(url, {
+            method: "GET",
+            headers: {
+              Authorization: `Bearer ${token}`,
+              Accept: "*/*",
+            },
           });
 
-          // Add event listeners after the buttons are created
-          attachMatchButtonListeners();
-        }
-
-        function attachMatchButtonListeners() {
-          document
-            .querySelectorAll(".fetch-matches-button")
-            .forEach((button) => {
-              button.addEventListener("click", function (event) {
-                event.preventDefault();
-                const docId = this.getAttribute("data-doc-id");
-                window.location.href = `matching_documents.html?docId=${docId}`;
-              });
-            });
-        }
-
-        async function fetchMatches(docId) {
-          try {
-            const response = await fetch(
-              `http://localhost:3000/document/matches/${docId}`,
-              {
-                headers: { Authorization: `Bearer ${token}` },
-              }
-            );
-
-            if (!response.ok)
-              throw new Error(`HTTP error! Status: ${response.status}`);
-
-            const data = await response.json();
-            if (!data.matches || !Array.isArray(data.matches))
-              throw new Error("Invalid matches response");
-
-            renderMatches(data.matches);
-          } catch (error) {
-            console.error("Error fetching matches:", error);
-          }
-        }
-
-        function renderMatches(matches) {
-          matchList.innerHTML = "";
-
-          if (matches.length === 0) {
-            matchList.innerHTML = "<p>No matching documents found.</p>";
-            return;
+          console.log("Matches fetch response status:", response.status);
+          if (!response.ok) {
+            if (response.status === 401) {
+              console.log("Unauthorized, redirecting to login...");
+              localStorage.removeItem("token");
+              window.location.href = "../login/login.html";
+              return;
+            }
+            throw new Error(`HTTP error! Status: ${response.status}`);
           }
 
-          matches.forEach((match) => {
-            const card = document.createElement("div");
-            card.classList.add("match-card");
+          const data = await response.json();
+          console.log("Matches data received:", data);
 
-            card.innerHTML = `
-              <h3>${match.filename}</h3>
-              <p><strong>Created At:</strong> ${match.created_at}</p>
-              <p><strong>Content:</strong> <pre>${match.content}</pre></p>
-              <a href="http://localhost:3000/${match.filepath}" download>Download</a>
-            `;
+          // Store the fetched data in localStorage
+          localStorage.setItem("matchingDocuments", JSON.stringify(data));
 
-            matchList.appendChild(card);
-          });
+          // Redirect to the new page
+          window.location.href = "matches.html";
+        } catch (error) {
+          console.error("Error loading matches:", error);
+          alert(`Error loading matches: ${error.message}`);
         }
+      }
 
-        uploadForm.addEventListener("submit", async (event) => {
-          event.preventDefault();
-
-          const documentName = document.getElementById("documentName").value;
-          const documentFile = document.getElementById("documentFile").files[0];
-
-          if (!documentName || !documentFile) {
-            uploadStatus.textContent = "Please fill all fields!";
-            uploadStatus.style.color = "red";
-            return;
-          }
-
-          const formData = new FormData();
-          formData.append("filename", documentName);
-          formData.append("document", documentFile);
-
-          try {
-            const response = await fetch(
-              "http://localhost:3000/document/upload",
-              {
-                method: "POST",
-                body: formData,
-                headers: { Authorization: `Bearer ${token}` },
-              }
-            );
-
-            if (!response.ok) throw new Error("Failed to upload file");
-
-            uploadStatus.textContent = "File uploaded successfully!";
-            uploadStatus.style.color = "green";
-
-            uploadForm.reset();
-
-            setTimeout(() => {
-              uploadStatus.textContent = "";
-            }, 3000);
-
-            fetchDocuments();
-          } catch (error) {
-            console.error("Upload error:", error);
-            uploadStatus.textContent = "Upload failed!";
-            uploadStatus.style.color = "red";
-          }
-        });
-
-        fetchDocuments();
+      // Initialization
+      document.addEventListener("DOMContentLoaded", () => {
+        console.log("Initializing page...");
+        const token = checkAuth();
+        if (token) {
+          setupUploadForm();
+          loadDocuments();
+        }
       });
     </script>
   </body>
