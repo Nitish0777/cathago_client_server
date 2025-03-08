@@ -5,31 +5,99 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Matching Documents</title>
     <style>
+      /* Dark Theme */
       body {
         font-family: Arial, sans-serif;
+        background-color: #121212;
+        color: #e0e0e0;
         padding: 20px;
-      }
-      .match-card {
-        border: 1px solid #ccc;
-        padding: 10px;
-        margin-bottom: 10px;
-        border-radius: 5px;
-      }
-      .match-card h3 {
         margin: 0;
       }
+
+      h1 {
+        color: #ffffff;
+        text-align: center;
+        font-size: 2.5rem;
+        margin-bottom: 20px;
+      }
+
+      .match-card {
+        background-color: #1e1e1e;
+        border: 1px solid #333;
+        padding: 20px;
+        margin-bottom: 15px;
+        border-radius: 10px;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+      }
+
+      .match-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+      }
+
+      .match-card h3 {
+        margin: 0;
+        color: #ffffff;
+        font-size: 1.5rem;
+      }
+
+      .match-card p {
+        margin: 10px 0;
+        color: #b0b0b0;
+      }
+
       .match-card a {
         color: #007bff;
         text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        transition: color 0.3s ease;
       }
+
       .match-card a:hover {
-        text-decoration: underline;
+        color: #0056b3;
+        text-decoration: none;
+      }
+
+      .match-card a svg {
+        width: 20px;
+        height: 20px;
+        fill: currentColor;
+        transition: transform 0.3s ease;
+      }
+
+      .match-card a:hover svg {
+        transform: translateY(-2px);
+      }
+
+      /* Animation for no data message */
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+        }
+        to {
+          opacity: 1;
+        }
+      }
+
+      #match-list p {
+        text-align: center;
+        color: #b0b0b0;
+        animation: fadeIn 1s ease-in-out;
       }
     </style>
   </head>
   <body>
     <h1>Matching Documents</h1>
     <div id="match-list"></div>
+
+    <!-- SVG Icons -->
+    <svg style="display: none">
+      <symbol id="download-icon" viewBox="0 0 24 24">
+        <path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z" />
+      </symbol>
+    </svg>
 
     <script>
       // Retrieve data from localStorage
@@ -58,6 +126,7 @@
                 <p><strong>Document ID:</strong> ${match.docId || "N/A"}</p>
                 <a href="http://localhost:3000${match.filePath}" 
                   download="${match.filename || "document"}">
+                  <svg><use href="#download-icon" /></svg>
                   Download
                 </a>
               </div>

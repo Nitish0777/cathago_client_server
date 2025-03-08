@@ -5,6 +5,227 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Dashboard</title>
     <link rel="stylesheet" href="dashboard.css" />
+    <style>
+      /* Dark Theme */
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #121212;
+        color: #e0e0e0;
+        margin: 0;
+        padding: 20px;
+      }
+
+      .container {
+        max-width: 1200px;
+        margin: 0 auto;
+      }
+
+      h1 {
+        color: #ffffff;
+        font-size: 2.5rem;
+        margin-bottom: 20px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      h2 {
+        color: #ffffff;
+        font-size: 2rem;
+        margin-bottom: 15px;
+      }
+
+      .btn {
+        background-color: #007bff;
+        color: #ffffff;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s ease, transform 0.3s ease;
+      }
+
+      .btn:hover {
+        background-color: #0056b3;
+        transform: translateY(-2px);
+      }
+
+      .scan-button-container {
+        text-align: center;
+        margin-bottom: 30px;
+      }
+
+      .scan-btn {
+        background-color: #28a745;
+        font-size: 1.2rem;
+        padding: 15px 30px;
+      }
+
+      .scan-btn:hover {
+        background-color: #218838;
+      }
+
+      .user-info {
+        background-color: #1e1e1e;
+        padding: 20px;
+        border-radius: 10px;
+        margin-bottom: 30px;
+      }
+
+      .user-info p {
+        margin: 10px 0;
+        color: #b0b0b0;
+      }
+
+      .user-info strong {
+        color: #ffffff;
+      }
+
+      .documents,
+      .request-credits,
+      .credit-history,
+      .latest-credit-request {
+        background-color: #1e1e1e;
+        padding: 20px;
+        border-radius: 10px;
+        margin-bottom: 30px;
+      }
+
+      .document-list {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+        gap: 15px;
+      }
+
+      .document-card {
+        background-color: #2c2c2c;
+        padding: 15px;
+        border-radius: 10px;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+      }
+
+      .document-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+      }
+
+      .document-card h3 {
+        margin: 0;
+        color: #ffffff;
+        font-size: 1.2rem;
+      }
+
+      .document-card p {
+        margin: 10px 0;
+        color: #b0b0b0;
+      }
+
+      .document-card a {
+        color: #007bff;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        transition: color 0.3s ease;
+      }
+
+      .document-card a:hover {
+        color: #0056b3;
+      }
+
+      .document-card a svg {
+        width: 20px;
+        height: 20px;
+        fill: currentColor;
+        transition: transform 0.3s ease;
+      }
+
+      .document-card a:hover svg {
+        transform: translateY(-2px);
+      }
+
+      .request-credits form {
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+      }
+
+      .request-credits label {
+        color: #ffffff;
+      }
+
+      .request-credits input {
+        padding: 10px;
+        border-radius: 5px;
+        border: 1px solid #333;
+        background-color: #2c2c2c;
+        color: #e0e0e0;
+      }
+
+      .request-credits input:focus {
+        outline: none;
+        border-color: #007bff;
+      }
+
+      .request-credits button {
+        align-self: flex-start;
+      }
+
+      #request-message p {
+        margin: 10px 0;
+      }
+
+      .modal {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.8);
+        justify-content: center;
+        align-items: center;
+      }
+
+      .modal-content {
+        background-color: #1e1e1e;
+        padding: 20px;
+        border-radius: 10px;
+        max-width: 80%;
+        max-height: 80%;
+        overflow-y: auto;
+      }
+
+      .close {
+        color: #ffffff;
+        float: right;
+        font-size: 1.5rem;
+        cursor: pointer;
+      }
+
+      .close:hover {
+        color: #b0b0b0;
+      }
+
+      .credit-request.card,
+      .latest-credit-request .card {
+        background-color: #2c2c2c;
+        padding: 15px;
+        border-radius: 10px;
+        margin-bottom: 15px;
+      }
+
+      .credit-request.card p,
+      .latest-credit-request .card p {
+        margin: 10px 0;
+        color: #b0b0b0;
+      }
+
+      .credit-request.card strong,
+      .latest-credit-request .card strong {
+        color: #ffffff;
+      }
+    </style>
   </head>
   <body>
     <div class="container">
@@ -60,16 +281,8 @@
       </div>
     </div>
 
-    <div
-      id="credit-history"
-      class="credit-history"
-      style="max-width: 40%"
-    ></div>
-    <div
-      id="latest-credit-request"
-      class="latest-credit-request"
-      style="max-width: 40%"
-    ></div>
+    <div id="credit-history" class="credit-history"></div>
+    <div id="latest-credit-request" class="latest-credit-request"></div>
 
     <script>
       document.getElementById("logout-button").addEventListener("click", () => {
@@ -111,10 +324,10 @@
             const card = document.createElement("div");
             card.className = "document-card";
             card.innerHTML = `
-        <h3>${doc.filename}</h3>
-        <p>File ID: ${doc.id}</p>
-        <a href="${doc.filepath}" download>Download</a>
-      `;
+              <h3>${doc.filename}</h3>
+              <p>File ID: ${doc.id}</p>
+              <a href="${doc.filepath}" download>Download</a>
+            `;
             card.addEventListener("click", async () => {
               const fileResponse = await fetch(
                 `http://localhost:3000/${doc.filepath}`
@@ -133,11 +346,11 @@
             const reqDiv = document.createElement("div");
             reqDiv.className = "credit-request card";
             reqDiv.innerHTML = `
-        <p><strong>ID:</strong> ${req.id}</p>
-        <p><strong>Requested Credits:</strong> ${req.credits_requested}</p>
-        <p><strong>Status:</strong> ${req.status}</p>
-        <p><strong>Timestamp:</strong> ${req.timestamp}</p>
-      `;
+              <p><strong>ID:</strong> ${req.id}</p>
+              <p><strong>Requested Credits:</strong> ${req.credits_requested}</p>
+              <p><strong>Status:</strong> ${req.status}</p>
+              <p><strong>Timestamp:</strong> ${req.timestamp}</p>
+            `;
             creditHistoryDiv.appendChild(reqDiv);
           });
 
@@ -147,14 +360,14 @@
               "latest-credit-request"
             );
             latestReqDiv.innerHTML = `
-        <h2>Latest Credit Request</h2>
-        <div class="card">
-          <p><strong>ID:</strong> ${data.latestCreditRequest.id}</p>
-          <p><strong>Requested Credits:</strong> ${data.latestCreditRequest.credits_requested}</p>
-          <p><strong>Status:</strong> ${data.latestCreditRequest.status}</p>
-          <p><strong>Timestamp:</strong> ${data.latestCreditRequest.timestamp}</p>
-        </div>
-      `;
+              <h2>Latest Credit Request</h2>
+              <div class="card">
+                <p><strong>ID:</strong> ${data.latestCreditRequest.id}</p>
+                <p><strong>Requested Credits:</strong> ${data.latestCreditRequest.credits_requested}</p>
+                <p><strong>Status:</strong> ${data.latestCreditRequest.status}</p>
+                <p><strong>Timestamp:</strong> ${data.latestCreditRequest.timestamp}</p>
+              </div>
+            `;
           } else {
             document.getElementById("latest-credit-request").style.display =
               "none";
@@ -205,6 +418,17 @@
                 "<p style='color: red;'>Failed to request credits. Try again later.</p>";
             }
           });
+      });
+
+      // Close Modal
+      document.querySelector(".close").addEventListener("click", () => {
+        document.getElementById("preview-modal").style.display = "none";
+      });
+
+      window.addEventListener("click", (event) => {
+        if (event.target === document.getElementById("preview-modal")) {
+          document.getElementById("preview-modal").style.display = "none";
+        }
       });
     </script>
   </body>

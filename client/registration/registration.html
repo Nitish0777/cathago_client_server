@@ -5,126 +5,519 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Cathago Sign Up Form</title>
     <style>
+      @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap");
+
+      :root {
+        --primary-color: #4a7fff;
+        --primary-dark: #3a63cc;
+        --background: #121212;
+        --card-bg: #1e1e1e;
+        --text-primary: #ffffff;
+        --text-secondary: #b0b0b0;
+        --input-bg: #2a2a2a;
+        --input-border: #3a3a3a;
+        --input-focus: #4a7fff;
+      }
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
       body {
-        font-family: Arial, sans-serif;
-        background-color: #4a7fff;
+        font-family: "Poppins", sans-serif;
+        background: linear-gradient(135deg, #121212 0%, #1a1a1a 100%);
+        color: var(--text-primary);
         display: flex;
         justify-content: center;
         align-items: center;
-        height: 100vh;
-        margin: 0;
+        min-height: 100vh;
+        overflow-x: hidden;
+        position: relative;
+      }
+
+      body::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: radial-gradient(
+          circle at 50% 50%,
+          rgba(74, 127, 255, 0.1),
+          transparent 60%
+        );
+        z-index: 0;
       }
 
       .registration-container {
-        background-color: white;
-        border-radius: 8px;
-        padding: 30px;
-        width: 350px;
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        background-color: var(--card-bg);
+        border-radius: 16px;
+        padding: 40px;
+        width: 400px;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+        position: relative;
+        z-index: 1;
+        backdrop-filter: blur(5px);
+        border: 1px solid rgba(255, 255, 255, 0.05);
+        transform: translateY(20px);
+        opacity: 0;
+        animation: fadeIn 0.8s ease-out forwards;
+      }
+
+      @keyframes fadeIn {
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      .logo {
+        text-align: center;
+        margin-bottom: 30px;
+      }
+
+      .logo svg {
+        height: 40px;
+        fill: var(--primary-color);
       }
 
       .registration-container h2 {
         text-align: center;
-        margin-bottom: 20px;
-        color: #333;
+        margin-bottom: 30px;
+        color: var(--text-primary);
+        font-weight: 600;
+        font-size: 24px;
+        letter-spacing: 0.5px;
+        position: relative;
+        display: inline-block;
+        left: 50%;
+        transform: translateX(-50%);
+      }
+
+      .registration-container h2::after {
+        content: "";
+        position: absolute;
+        height: 3px;
+        width: 40px;
+        background: var(--primary-color);
+        bottom: -10px;
+        left: 50%;
+        transform: translateX(-50%);
+        border-radius: 3px;
       }
 
       .form-group {
-        margin-bottom: 15px;
+        margin-bottom: 24px;
+        position: relative;
+      }
+
+      .form-group label {
+        display: block;
+        margin-bottom: 8px;
+        font-size: 14px;
+        color: var(--text-secondary);
+        font-weight: 500;
+        transition: all 0.3s ease;
       }
 
       .form-group input,
       .form-group select {
         width: 100%;
-        padding: 10px;
-        border: 1px solid #ddd;
-        border-radius: 4px;
-        box-sizing: border-box;
+        padding: 14px 16px;
+        border: 1px solid var(--input-border);
+        border-radius: 8px;
+        background-color: var(--input-bg);
+        color: var(--text-primary);
+        font-size: 14px;
+        transition: all 0.3s ease;
+        font-family: "Poppins", sans-serif;
+      }
+
+      .form-group input:focus,
+      .form-group select:focus {
+        border-color: var(--input-focus);
+        outline: none;
+        box-shadow: 0 0 0 3px rgba(74, 127, 255, 0.15);
       }
 
       .form-group input::placeholder,
       .form-group select::placeholder {
-        color: #999;
-      }
-
-      .checkbox-group {
-        display: flex;
-        align-items: center;
-        margin-bottom: 15px;
-      }
-
-      .checkbox-group input {
-        margin-right: 10px;
+        color: var(--text-secondary);
+        opacity: 0.7;
       }
 
       .register-btn {
         width: 100%;
-        padding: 12px;
-        background-color: #4a7fff;
+        padding: 14px;
+        background-color: var(--primary-color);
         color: white;
         border: none;
-        border-radius: 4px;
+        border-radius: 8px;
         cursor: pointer;
+        font-weight: 600;
+        font-size: 16px;
+        transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
+        font-family: "Poppins", sans-serif;
+        letter-spacing: 0.5px;
+        margin-top: 10px;
+      }
+
+      .register-btn:hover {
+        background-color: var(--primary-dark);
+        transform: translateY(-2px);
+        box-shadow: 0 6px 15px rgba(74, 127, 255, 0.25);
+      }
+
+      .register-btn:active {
+        transform: translateY(0);
+      }
+
+      .register-btn::after {
+        content: "";
+        position: absolute;
+        width: 30px;
+        height: 200px;
+        background-color: rgba(255, 255, 255, 0.2);
+        top: -50px;
+        left: -100px;
+        transform: rotate(45deg);
+        transition: all 0.5s;
+      }
+
+      .register-btn:hover::after {
+        left: 120%;
       }
 
       .login-link {
         text-align: center;
-        margin-top: 15px;
+        margin-top: 25px;
+        font-size: 14px;
+        color: var(--text-secondary);
       }
 
       .login-link a {
-        color: #4a7fff;
+        color: var(--primary-color);
         text-decoration: none;
+        font-weight: 500;
+        transition: all 0.3s ease;
+      }
+
+      .login-link a:hover {
+        text-decoration: underline;
+      }
+
+      .password-toggle {
+        position: absolute;
+        right: 15px;
+        top: 38px;
+        color: var(--text-secondary);
+        cursor: pointer;
+        transition: all 0.3s ease;
+        z-index: 2;
+      }
+
+      .password-toggle:hover {
+        color: var(--primary-color);
+      }
+
+      .animated-background {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: -1;
+        opacity: 0.4;
+      }
+
+      .circle {
+        position: absolute;
+        border-radius: 50%;
+        background: var(--primary-color);
+        animation: float 8s infinite;
+        opacity: 0.1;
+      }
+
+      .circle:nth-child(1) {
+        width: 300px;
+        height: 300px;
+        top: -150px;
+        left: -150px;
+        animation-delay: -1s;
+      }
+
+      .circle:nth-child(2) {
+        width: 200px;
+        height: 200px;
+        top: 50%;
+        right: -100px;
+        animation-delay: -2.5s;
+      }
+
+      .circle:nth-child(3) {
+        width: 150px;
+        height: 150px;
+        bottom: -75px;
+        left: 20%;
+        animation-delay: -4s;
+      }
+
+      @keyframes float {
+        0%,
+        100% {
+          transform: translateY(0) translateX(0);
+        }
+        25% {
+          transform: translateY(-20px) translateX(10px);
+        }
+        50% {
+          transform: translateY(0) translateX(20px);
+        }
+        75% {
+          transform: translateY(20px) translateX(10px);
+        }
+      }
+
+      .input-group {
+        position: relative;
+      }
+
+      .error-message {
+        color: #ff5252;
+        font-size: 12px;
+        margin-top: 5px;
+        display: none;
+      }
+
+      @media (max-width: 480px) {
+        .registration-container {
+          width: 90%;
+          padding: 30px 20px;
+        }
       }
     </style>
   </head>
   <body>
-    <script>
-      if (localStorage.getItem("token")) {
-        window.location.href = "../dashboard/dashboard.html";
-      }
-    </script>
+    <div class="animated-background">
+      <div class="circle"></div>
+      <div class="circle"></div>
+      <div class="circle"></div>
+    </div>
+
     <div class="registration-container">
-      <h2>Cathago Registration</h2>
+      <div class="logo">
+        <svg viewBox="0 0 200 50" xmlns="http://www.w3.org/2000/svg">
+          <path
+            d="M20,25 C20,13.954 28.954,5 40,5 L160,5 C171.046,5 180,13.954 180,25 C180,36.046 171.046,45 160,45 L40,45 C28.954,45 20,36.046 20,25 Z M40,15 C34.477,15 30,19.477 30,25 C30,30.523 34.477,35 40,35 C45.523,35 50,30.523 50,25 C50,19.477 45.523,15 40,15 Z M70,15 L70,35 L85,35 L85,30 L75,30 L75,15 L70,15 Z M90,15 L90,35 L105,35 L105,30 L95,30 L95,27.5 L103,27.5 L103,22.5 L95,22.5 L95,20 L105,20 L105,15 L90,15 Z M110,15 L110,35 L125,35 L125,30 L115,30 L115,15 L110,15 Z M130,15 L130,35 L145,35 L145,30 L135,30 L135,27.5 L143,27.5 L143,22.5 L135,22.5 L135,20 L145,20 L145,15 L130,15 Z M150,15 L150,35 L165,35 L165,30 L155,30 L155,15 L150,15 Z"
+          />
+        </svg>
+      </div>
+      <h2>Create Account</h2>
       <form id="registrationForm">
         <div class="form-group">
+          <label for="username">Username</label>
           <input
             type="text"
             id="username"
             placeholder="Enter your username"
             required
           />
+          <div class="error-message" id="username-error"></div>
         </div>
         <div class="form-group">
+          <label for="role">Role</label>
           <select id="role" required>
             <option value="" disabled selected>Select your role</option>
             <option value="user">User</option>
             <option value="admin">Admin</option>
           </select>
+          <div class="error-message" id="role-error"></div>
         </div>
         <div class="form-group">
-          <input
-            type="password"
-            id="password"
-            placeholder="Create password"
-            required
-          />
+          <label for="password">Password</label>
+          <div class="input-group">
+            <input
+              type="password"
+              id="password"
+              placeholder="Create a strong password"
+              required
+            />
+            <span class="password-toggle" id="togglePassword">
+              <svg
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                <circle cx="12" cy="12" r="3"></circle>
+              </svg>
+            </span>
+          </div>
+          <div class="error-message" id="password-error"></div>
         </div>
         <div class="form-group">
-          <input
-            type="password"
-            id="confirmPassword"
-            placeholder="Confirm password"
-            required
-          />
+          <label for="confirmPassword">Confirm Password</label>
+          <div class="input-group">
+            <input
+              type="password"
+              id="confirmPassword"
+              placeholder="Confirm your password"
+              required
+            />
+            <span class="password-toggle" id="toggleConfirmPassword">
+              <svg
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                <circle cx="12" cy="12" r="3"></circle>
+              </svg>
+            </span>
+          </div>
+          <div class="error-message" id="confirm-password-error"></div>
         </div>
 
-        <button type="submit" class="register-btn">Register Now</button>
+        <button type="submit" class="register-btn">Create Account</button>
       </form>
       <div class="login-link">
-        <a href="../login/login.html">Already have an account? Login now</a>
+        <span>Already have an account?</span>
+        <a href="../login/login.html">Sign in</a>
       </div>
     </div>
-    <script type="module" src="./registrationscript.js"></script>
+
+    <script>
+      // Check if already logged in
+      if (localStorage.getItem("token")) {
+        window.location.href = "../dashboard/dashboard.html";
+      }
+
+      // Toggle password visibility
+      document
+        .getElementById("togglePassword")
+        .addEventListener("click", function () {
+          const passwordInput = document.getElementById("password");
+          togglePasswordVisibility(passwordInput, this);
+        });
+
+      document
+        .getElementById("toggleConfirmPassword")
+        .addEventListener("click", function () {
+          const confirmPasswordInput =
+            document.getElementById("confirmPassword");
+          togglePasswordVisibility(confirmPasswordInput, this);
+        });
+
+      function togglePasswordVisibility(input, icon) {
+        if (input.type === "password") {
+          input.type = "text";
+          icon.innerHTML = `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+          <line x1="1" y1="1" x2="23" y2="23"></line>
+        </svg>`;
+        } else {
+          input.type = "password";
+          icon.innerHTML = `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+          <circle cx="12" cy="12" r="3"></circle>
+        </svg>`;
+        }
+      }
+
+      // Form validation
+      document
+        .getElementById("registrationForm")
+        .addEventListener("submit", function (e) {
+          e.preventDefault();
+
+          const username = document.getElementById("username").value;
+          const role = document.getElementById("role").value;
+          const password = document.getElementById("password").value;
+          const confirmPassword =
+            document.getElementById("confirmPassword").value;
+
+          let isValid = true;
+
+          // Reset error messages
+          document.querySelectorAll(".error-message").forEach((el) => {
+            el.style.display = "none";
+          });
+
+          // Validate username
+          if (username.length < 3) {
+            const error = document.getElementById("username-error");
+            error.textContent = "Username must be at least 3 characters long";
+            error.style.display = "block";
+            isValid = false;
+          }
+
+          // Validate role
+          if (!role) {
+            const error = document.getElementById("role-error");
+            error.textContent = "Please select a role";
+            error.style.display = "block";
+            isValid = false;
+          }
+
+          // Validate password
+          if (password.length < 6) {
+            const error = document.getElementById("password-error");
+            error.textContent = "Password must be at least 6 characters long";
+            error.style.display = "block";
+            isValid = false;
+          }
+
+          // Validate password confirmation
+          if (password !== confirmPassword) {
+            const error = document.getElementById("confirm-password-error");
+            error.textContent = "Passwords do not match";
+            error.style.display = "block";
+            isValid = false;
+          }
+
+          if (isValid) {
+            // Animation for button on successful validation
+            const button = document.querySelector(".register-btn");
+            button.innerText = "Creating Account...";
+
+            // Here you would normally send the form data to your server
+            // For demo purposes, we'll simulate a delay and redirect
+            setTimeout(() => {
+              // This is where you would handle the response from your server
+              // For now, we'll just redirect to the login page
+              window.location.href = "../login/login.html";
+            }, 1500);
+          }
+        });
+
+      // Add subtle animation to form elements on page load
+      document.addEventListener("DOMContentLoaded", function () {
+        const formGroups = document.querySelectorAll(".form-group");
+        formGroups.forEach((group, index) => {
+          group.style.opacity = "0";
+          group.style.transform = "translateY(20px)";
+          setTimeout(() => {
+            group.style.transition = "all 0.5s ease";
+            group.style.opacity = "1";
+            group.style.transform = "translateY(0)";
+          }, 100 + index * 100);
+        });
+      });
+    </script>
   </body>
 </html>
