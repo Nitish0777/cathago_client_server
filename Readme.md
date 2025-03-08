@@ -66,9 +66,22 @@ The application uses the following routes:
 - `/document/documents` - Endpoint to get user documents
 
 ### Images
+
+![image](https://github.com/user-attachments/assets/deb54dae-2194-4501-9df2-d468eb489a11)
+
+
+Login
+![image](https://github.com/user-attachments/assets/20e7ab9c-bb5f-49da-8739-1bf507eaa405)
+
+
+
 ![image](https://github.com/user-attachments/assets/fe2d4e30-6f2f-4c3a-a940-c949152b288d)
 
 
 ![image](https://github.com/user-attachments/assets/4fa2ab2d-00d6-4d6e-8acd-535d9398967b)
 
+
+![image](https://github.com/user-attachments/assets/92e117cb-f76f-41f6-bbe2-9cfbfc808248)
+
+![image](https://github.com/user-attachments/assets/d5e0cb10-5926-4af3-99b8-cc6517224d60)
 
