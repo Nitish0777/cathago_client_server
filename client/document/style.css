@@ -240,3 +240,48 @@ a {
 a:hover {
   text-decoration: underline;
 }
+
+/* Match card styles */
+.match-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  justify-content: center;
+}
+
+.match-card {
+  background-color: #ffffff;
+  padding: 15px;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  width: calc(33.333% - 20px);
+  box-sizing: border-box;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.match-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.match-card h3 {
+  margin: 0 0 10px;
+  color: #333;
+  font-size: 18px;
+}
+
+.match-card p {
+  margin: 0 0 10px;
+  color: #555;
+  font-size: 14px;
+}
+
+.match-card a {
+  color: #4a7fff;
+  text-decoration: none;
+  font-size: 14px;
+}
+
+.match-card a:hover {
+  text-decoration: underline;
+}

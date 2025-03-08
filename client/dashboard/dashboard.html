@@ -14,11 +14,11 @@
           <button id="logout-button" class="btn">Logout</button>
         </span>
       </h1>
-      <button>
-        <a href="../document/document.html" class="btn"
+      <div class="scan-button-container">
+        <a href="../document/document.html" class="btn scan-btn"
           >Scan Document and see History</a
         >
-      </button>
+      </div>
       <div class="user-info">
         <p><strong>Username:</strong> <span id="username"></span></p>
         <p>
@@ -60,8 +60,16 @@
       </div>
     </div>
 
-    <div id="credit-history" class="credit-history"></div>
-    <div id="latest-credit-request" class="latest-credit-request"></div>
+    <div
+      id="credit-history"
+      class="credit-history"
+      style="max-width: 40%"
+    ></div>
+    <div
+      id="latest-credit-request"
+      class="latest-credit-request"
+      style="max-width: 40%"
+    ></div>
 
     <script>
       document.getElementById("logout-button").addEventListener("click", () => {
@@ -123,7 +131,7 @@
           creditHistoryDiv.innerHTML = "<h2>Credit Request History</h2>";
           data.creditRequests.forEach((req) => {
             const reqDiv = document.createElement("div");
-            reqDiv.className = "credit-request";
+            reqDiv.className = "credit-request card";
             reqDiv.innerHTML = `
         <p><strong>ID:</strong> ${req.id}</p>
         <p><strong>Requested Credits:</strong> ${req.credits_requested}</p>
@@ -140,11 +148,16 @@
             );
             latestReqDiv.innerHTML = `
         <h2>Latest Credit Request</h2>
-        <p><strong>ID:</strong> ${data.latestCreditRequest.id}</p>
-        <p><strong>Requested Credits:</strong> ${data.latestCreditRequest.credits_requested}</p>
-        <p><strong>Status:</strong> ${data.latestCreditRequest.status}</p>
-        <p><strong>Timestamp:</strong> ${data.latestCreditRequest.timestamp}</p>
+        <div class="card">
+          <p><strong>ID:</strong> ${data.latestCreditRequest.id}</p>
+          <p><strong>Requested Credits:</strong> ${data.latestCreditRequest.credits_requested}</p>
+          <p><strong>Status:</strong> ${data.latestCreditRequest.status}</p>
+          <p><strong>Timestamp:</strong> ${data.latestCreditRequest.timestamp}</p>
+        </div>
       `;
+          } else {
+            document.getElementById("latest-credit-request").style.display =
+              "none";
           }
         } catch (error) {
           console.error("Error fetching profile data:", error);

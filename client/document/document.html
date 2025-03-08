@@ -28,7 +28,7 @@
     </div>
 
     <div class="matches">
-      <h2>Document Matches</h2>
+      <h2>Matching Documents</h2>
       <div class="match-list"></div>
     </div>
 
@@ -93,8 +93,9 @@
             .querySelectorAll(".fetch-matches-button")
             .forEach((button) => {
               button.addEventListener("click", function (event) {
+                event.preventDefault();
                 const docId = this.getAttribute("data-doc-id");
-                fetchMatches(docId);
+                window.location.href = `matching_documents.html?docId=${docId}`;
               });
             });
         }
@@ -134,19 +135,13 @@
             card.classList.add("match-card");
 
             card.innerHTML = `
-              <h3>${match.title}</h3>
-              <p><strong>Matched At:</strong> ${match.matched_at}</p>
-              <p><strong>Details:</strong> <pre>${match.details}</pre></p>
-              <button class="close-match-button">Close</button>
+              <h3>${match.filename}</h3>
+              <p><strong>Created At:</strong> ${match.created_at}</p>
+              <p><strong>Content:</strong> <pre>${match.content}</pre></p>
+              <a href="http://localhost:3000/${match.filepath}" download>Download</a>
             `;
 
             matchList.appendChild(card);
-          });
-
-          document.querySelectorAll(".close-match-button").forEach((button) => {
-            button.addEventListener("click", function () {
-              this.parentElement.remove();
-            });
           });
         }
 

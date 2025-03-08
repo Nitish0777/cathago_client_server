@@ -6,34 +6,41 @@ body {
 }
 
 .container {
-  max-width: 800px;
+  max-width: 900px;
   margin: 50px auto;
   background-color: white;
-  padding: 20px;
-  border-radius: 8px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  padding: 30px;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 h1 {
   color: #333;
   text-align: center;
+  margin-bottom: 20px;
+}
+
+h2 {
+  color: #333;
+  margin-bottom: 15px;
 }
 
 .user-info {
-  margin-bottom: 20px;
+  margin-bottom: 30px;
+  padding: 20px;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .user-info p {
   font-size: 18px;
   color: #555;
+  margin: 10px 0;
 }
 
 .documents {
-  margin-top: 20px;
-}
-
-.documents h2 {
-  color: #333;
+  margin-top: 30px;
 }
 
 .document-list {
@@ -43,13 +50,19 @@ h1 {
 }
 
 .document-card {
-  background-color: #f9f9f9;
-  padding: 15px;
+  background-color: #ffffff;
+  padding: 20px;
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   width: calc(50% - 20px);
   box-sizing: border-box;
   cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.document-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
 .document-card h3 {
@@ -81,12 +94,12 @@ h1 {
   width: 100%;
   height: 100%;
   overflow: auto;
-  background-color: rgba(0, 0, 0, 0.4);
+  background-color: rgba(0, 0, 0, 0.5);
 }
 
 .modal-content {
   background-color: #fff;
-  margin: 15% auto;
+  margin: 10% auto;
   padding: 20px;
   border: 1px solid #888;
   width: 80%;
@@ -115,17 +128,17 @@ h1 {
 
 /* Request credits form styles */
 .request-credits {
-  margin-top: 20px;
-}
-
-.request-credits h2 {
-  color: #333;
+  margin-top: 30px;
+  padding: 20px;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .request-credits form {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 15px;
 }
 
 .request-credits label {
@@ -170,11 +183,13 @@ h1 {
 
 /* Credit History Section */
 .credit-history {
-  margin-top: 20px;
+  margin-top: 30px;
   padding: 20px;
   background-color: #ffffff;
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  width: 40%;
+  margin: 0 auto;
 }
 
 .credit-history h2 {
@@ -203,17 +218,26 @@ h1 {
 
 /* Latest Credit Request Section */
 .latest-credit-request {
-  margin-top: 20px;
+  margin-top: 30px;
   padding: 20px;
   background-color: #ffffff;
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  width: 40%;
+  margin: 0 auto;
 }
 
 .latest-credit-request h2 {
   color: #333;
   text-align: center;
   margin-bottom: 15px;
+}
+
+.latest-credit-request .card {
+  background-color: #f9f9f9;
+  padding: 15px;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .latest-credit-request p {
@@ -224,4 +248,104 @@ h1 {
 
 .latest-credit-request p strong {
   color: #333;
+}
+
+/* Logout button */
+#logout-button {
+  padding: 10px 20px;
+  background-color: #ff4a4a;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background-color 0.3s ease;
+}
+
+#logout-button:hover {
+  background-color: #d43f3f;
+}
+
+/* General button styles */
+.btn {
+  padding: 10px 20px;
+  background-color: #4a7fff;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background-color 0.3s ease;
+}
+
+.btn:hover {
+  background-color: #357abd;
+}
+
+/* Scan button styles */
+.scan-button-container {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.scan-btn {
+  display: inline-block;
+  padding: 12px 24px;
+  background-color: #4a7fff;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  text-decoration: none;
+  font-size: 16px;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.scan-btn:hover {
+  background-color: #357abd;
+  transform: translateY(-3px);
+}
+
+/* Match card styles */
+.match-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  justify-content: center;
+}
+
+.match-card {
+  background-color: #ffffff;
+  padding: 15px;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  width: calc(33.333% - 20px);
+  box-sizing: border-box;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.match-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.match-card h3 {
+  margin: 0 0 10px;
+  color: #333;
+  font-size: 18px;
+}
+
+.match-card p {
+  margin: 0 0 10px;
+  color: #555;
+  font-size: 14px;
+}
+
+.match-card a {
+  color: #4a7fff;
+  text-decoration: none;
+  font-size: 14px;
+}
+
+.match-card a:hover {
+  text-decoration: underline;
 }

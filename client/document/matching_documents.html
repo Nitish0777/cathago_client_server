@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Matching Documents</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div class="matches">
+      <h2>Matching Documents</h2>
+      <div class="match-list"></div>
+    </div>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        const token = localStorage.getItem("token");
+        if (!token) {
+          window.location.href = "../login/login.html";
+          return;
+        }
+
+        const matchList = document.querySelector(".match-list");
+        const urlParams = new URLSearchParams(window.location.search);
+        const docId = urlParams.get("docId");
+
+        if (!docId) {
+          matchList.innerHTML = "<p>Invalid document ID.</p>";
+          return;
+        }
+
+        fetchMatches(docId);
+
+        async function fetchMatches(docId) {
+          try {
+            const response = await fetch(
+              `http://localhost:3000/document/matches/${docId}`,
+              {
+                headers: { Authorization: `Bearer ${token}` },
+              }
+            );
+
+            if (!response.ok) {
+              if (response.status === 401) {
+                // Handle unauthorized access
+                localStorage.removeItem("token");
+                window.location.href = "../login/login.html";
+                return;
+              }
+              throw new Error(`HTTP error! Status: ${response.status}`);
+            }
+
+            const data = await response.json();
+            if (
+              !data.similarDocuments ||
+              !Array.isArray(data.similarDocuments)
+            ) {
+              throw new Error("Invalid matches response");
+            }
+
+            renderMatches(data.similarDocuments);
+          } catch (error) {
+            console.error("Error fetching matches:", error);
+            matchList.innerHTML =
+              "<p>Error fetching matching documents. Please try again.</p>";
+          }
+        }
+
+        function renderMatches(matches) {
+          matchList.innerHTML = "";
+
+          if (matches.length === 0) {
+            matchList.innerHTML = "<p>No matching documents found.</p>";
+            return;
+          }
+
+          matches.forEach((match) => {
+            const card = document.createElement("div");
+            card.classList.add("match-card");
+
+            card.innerHTML = `
+              <h3>${match.filename}</h3>
+              <p><strong>Similarity:</strong> ${(
+                match.similarity * 100
+              ).toFixed(2)}%</p>
+              <a href="http://localhost:3000${
+                match.filePath
+              }" target="_blank" download="${match.filename}">Download</a>
+            `;
+
+            matchList.appendChild(card);
+          });
+        }
+      });
+    </script>
+  </body>
+</html>
