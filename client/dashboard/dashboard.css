@@ -62,7 +62,7 @@ body::before {
   animation: fadeIn 0.8s ease-out forwards;
   display: flex;
   flex-direction: column;
-  justify-content: center; /* Center content vertically */
+  justify-content: center;
 }
 
 @keyframes fadeIn {
