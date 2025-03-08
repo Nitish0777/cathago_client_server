@@ -34,9 +34,9 @@ To start the application, use the following commands:
    npm start
    ```
 2. Start the client:
-   Run Go Live on index.html
 
    ```
+   Run Go Live on index.html
 
    ```
 
