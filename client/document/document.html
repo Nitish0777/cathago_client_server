@@ -162,6 +162,36 @@
       </div>
     </div>
 
+    <style>
+      .navbar {
+        position: fixed;
+        top: 0;
+        width: 100%;
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(10px);
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        z-index: 1000;
+      }
+
+      .navbar-container {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 10px 20px;
+        max-width: 100%; /* Changed to 100% */
+        margin: 0 auto;
+      }
+
+      .container {
+        margin-top: 80px; /* Increased margin to account for the navbar */
+        padding: 20px;
+        max-width: 1400px; /* Increased container width */
+        margin: 0 auto;
+      }
+
+      /* ...existing code... */
+    </style>
+
     <script src="document.js"></script>
   </body>
 </html>
