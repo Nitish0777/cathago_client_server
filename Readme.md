@@ -64,3 +64,11 @@ The application uses the following routes:
 - `/document/upload` - Endpoint to upload a document
 - `/document/matches/:docId` - Endpoint to get matching documents
 - `/document/documents` - Endpoint to get user documents
+
+### Images
+![image](https://github.com/user-attachments/assets/fe2d4e30-6f2f-4c3a-a940-c949152b288d)
+
+
+![image](https://github.com/user-attachments/assets/4fa2ab2d-00d6-4d6e-8acd-535d9398967b)
+
+
